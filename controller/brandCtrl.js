@@ -1,61 +1,59 @@
-const asyncHandler = require("express-async-handler");
 const Brand = require("../models/brandModel");
+const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 
-const getAllBrand = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  try {
-    const getAllBrand = await Brand.find();
-    res.json(getAllBrand);
-  } catch (err) {
-    throw new Error(err);
-  }
-});
-const getABrand = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  try {
-    const getABrand = await Brand.findById(id);
-    res.json(getABrand);
-  } catch (err) {
-    throw new Error(err);
-  }
-});
 const createBrand = asyncHandler(async (req, res) => {
   try {
-    const createBrand = await Brand.create(req.body);
-    res.json(createBrand);
-  } catch (err) {
-    throw new Error(err);
+    const newBrand = await Brand.create(req.body);
+    res.json(newBrand);
+  } catch (error) {
+    throw new Error(error);
   }
 });
 const updateBrand = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const updateBrand = await Brand.findByIdAndUpdate(id, req.body, {
+    const updatedBrand = await Brand.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.json(updateBrand);
-  } catch (err) {
-    throw new Error(err);
+    res.json(updatedBrand);
+  } catch (error) {
+    throw new Error(error);
   }
 });
 const deleteBrand = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
-
   try {
-    const deleteBrand = await Brand.findByIdAndDelete(id);
-    res.json(deleteBrand);
-  } catch (err) {
-    throw new Error(err);
+    const deletedBrand = await Brand.findByIdAndDelete(id);
+    res.json(deletedBrand);
+  } catch (error) {
+    throw new Error(error);
   }
 });
-
+const getBrand = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  try {
+    const getaBrand = await Brand.findById(id);
+    res.json(getaBrand);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+const getallBrand = asyncHandler(async (req, res) => {
+  try {
+    const getallBrand = await Brand.find();
+    res.json(getallBrand);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 module.exports = {
-  getAllBrand,
   createBrand,
   updateBrand,
   deleteBrand,
-  getABrand,
+  getBrand,
+  getallBrand,
 };

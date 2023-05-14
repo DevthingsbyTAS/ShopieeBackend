@@ -1,28 +1,31 @@
 const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
-
-const multerStorage = multer.diskStorage({
+const fs = require("fs");
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/images"));
+    cb(null, path.join(__dirname, "../public/images/"));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ".jpeg");
+    const uniquesuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniquesuffix + ".jpeg");
   },
 });
-const multerFIlter = (req, file, cb) => {
+
+const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb({ mesasge: "unsupported File Format" }, false);
+    cb({ message: "Unsupported file format" }, false);
   }
 };
+
 const uploadPhoto = multer({
-  storage: multerStorage,
-  fileFilter: multerFIlter,
-  limits: { fieldSize: 2000000 },
+  storage: storage,
+  fileFilter: multerFilter,
+  limits: { fileSize: 1000000 },
 });
+
 const productImgResize = async (req, res, next) => {
   if (!req.files) return next();
   await Promise.all(
@@ -30,12 +33,14 @@ const productImgResize = async (req, res, next) => {
       await sharp(file.path)
         .resize(300, 300)
         .toFormat("jpeg")
-        .jpeg({ quality: 90 })
-        .toFile(`public/images/products/${file.fieldname}`);
+        .jpeg({ quality: 90 });
+      // .toFile(`/public/images/products/${file.filename}`);
+      // fs.unlinkSync(`public/images/products/${file.filename}`);
     })
   );
   next();
 };
+
 const blogImgResize = async (req, res, next) => {
   if (!req.files) return next();
   await Promise.all(
@@ -43,8 +48,9 @@ const blogImgResize = async (req, res, next) => {
       await sharp(file.path)
         .resize(300, 300)
         .toFormat("jpeg")
-        .jpeg({ quality: 90 })
-        .toFile(`public/images/blogs/${file.fieldname}`);
+        .jpeg({ quality: 90 });
+      // .toFile(`/public/images/blogs/${file.filename}`);
+      // fs.unlinkSync(`public/images/blogs/${file.filename}`);
     })
   );
   next();

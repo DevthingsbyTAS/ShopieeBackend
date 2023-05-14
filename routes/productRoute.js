@@ -5,31 +5,21 @@ const {
   getAllProduct,
   updateProduct,
   deleteProduct,
-  addToWishList,
+  addToWishlist,
   rating,
-  uploadImages,
 } = require("../controller/productCtrl");
-
-const { authMiddlreWare, isAdmin } = require("../middlewares/authMiddleWare");
-const {
-  uploadPhoto,
-  productImgResize,
-} = require("../middlewares/uploadImages");
+const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
-router.post("/", authMiddlreWare, isAdmin, createProduct);
-router.put(
-  "/upload/:id",
-  authMiddlreWare,
-  isAdmin,
-  uploadPhoto.array("images", 10),
-  productImgResize,
-  uploadImages
-);
+router.post("/", authMiddleware, isAdmin, createProduct);
+
 router.get("/:id", getaProduct);
-router.put("/wishlist", authMiddlreWare, addToWishList);
-router.put("/rating", authMiddlreWare, rating);
-router.put("/:id", authMiddlreWare, isAdmin, updateProduct);
-router.delete("/:id", authMiddlreWare, isAdmin, deleteProduct);
+router.put("/wishlist", authMiddleware, addToWishlist);
+router.put("/rating", authMiddleware, rating);
+
+router.put("/:id", authMiddleware, isAdmin, updateProduct);
+router.delete("/:id", authMiddleware, isAdmin, deleteProduct);
+
 router.get("/", getAllProduct);
+
 module.exports = router;

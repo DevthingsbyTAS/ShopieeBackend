@@ -14,7 +14,6 @@ var blogSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      unique: true,
     },
     numViews: {
       type: Number,
@@ -40,15 +39,12 @@ var blogSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    image: {
-      type: String,
-      default:
-        "https: //encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5buPddfkNRblPF-d7i2wKEdM4mux4yafdUkl_IsQJ&s",
-    },
+
     author: {
       type: String,
       default: "Admin",
     },
+    images: [],
   },
   {
     toJSON: {
@@ -57,9 +53,7 @@ var blogSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-    timestamps: {
-      timestamps: true,
-    },
+    timestamps: true,
   }
 );
 

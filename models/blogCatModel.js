@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); // Erase if already required
 
 // Declare the Schema of the Mongo model
-var productCategorySchema = new mongoose.Schema(
+var blogcategorySchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -10,8 +10,10 @@ var productCategorySchema = new mongoose.Schema(
       index: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 //Export the model
-module.exports = mongoose.model("productCategory", productCategorySchema);
+module.exports = mongoose.model("BCategory", blogcategorySchema);

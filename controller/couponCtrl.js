@@ -1,62 +1,59 @@
 const Coupon = require("../models/couponModel");
-const User = require("../models/userModel");
-const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
-const { loginUserCtrl } = require("./userCtrl");
+const asynHandler = require("express-async-handler");
 
-const getCoupon = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+const createCoupon = asynHandler(async (req, res) => {
   try {
-    const getCoupon = await Coupon.findById(id);
-    res.json(getCoupon);
-  } catch (err) {
-    throw new Error(err);
+    const newCoupon = await Coupon.create(req.body);
+    res.json(newCoupon);
+  } catch (error) {
+    throw new Error(error);
   }
 });
-const getAllCoupon = asyncHandler(async (req, res) => {
+const getAllCoupons = asynHandler(async (req, res) => {
   try {
-    const getAllCoupon = await Coupon.find();
-    res.json(getAllCoupon);
-  } catch (err) {
-    throw new Error(err);
+    const coupons = await Coupon.find();
+    res.json(coupons);
+  } catch (error) {
+    throw new Error(error);
   }
 });
-const createCoupon = asyncHandler(async (req, res) => {
-  try {
-    const createCoupon = await Coupon.create(req.body);
-    res.json(createCoupon);
-  } catch (err) {
-    throw new Error(err);
-  }
-});
-const updateCoupon = asyncHandler(async (req, res) => {
+const updateCoupon = asynHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const updateCoupon = await Coupon.findByIdAndUpdate(id, req.body, {
+    const updatecoupon = await Coupon.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.json(updateCoupon);
-  } catch (err) {
-    throw new Error(err);
+    res.json(updatecoupon);
+  } catch (error) {
+    throw new Error(error);
   }
 });
-const deleteCoupon = asyncHandler(async (req, res) => {
+const deleteCoupon = asynHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
-
   try {
-    const deleteCoupon = await Coupon.findByIdAndDelete(id);
-    res.json(deleteCoupon);
-  } catch (err) {
-    throw new Error(err);
+    const deletecoupon = await Coupon.findByIdAndDelete(id);
+    res.json(deletecoupon);
+  } catch (error) {
+    throw new Error(error);
   }
 });
-
+const getCoupon = asynHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  try {
+    const getAcoupon = await Coupon.findById(id);
+    res.json(getAcoupon);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 module.exports = {
   createCoupon,
+  getAllCoupons,
   updateCoupon,
-  getCoupon,
-  getAllCoupon,
   deleteCoupon,
+  getCoupon,
 };
